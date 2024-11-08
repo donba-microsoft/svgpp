@@ -19,13 +19,13 @@ namespace qi = boost::spirit::qi;
 
 namespace detail
 {
-  typedef boost::tuple<unsigned char, unsigned char, unsigned char> rgb_t;
+  typedef boost::tuple<unsigned char, unsigned char, unsigned char, unsigned char> rgba_t;
 
   namespace
   {
     struct color_keywords
     {
-      typedef qi::symbols<char, rgb_t> symbols;
+      typedef qi::symbols<char, rgba_t> symbols;
       static bool initialized_;
       static symbols symbols_;
     };
@@ -194,9 +194,9 @@ private:
   }
 #endif
 
-  static color_type color_keyword(detail::rgb_t const & rgb)
+  static color_type color_keyword(detail::rgba_t const & rgba)
   {
-    return ColorFactory::create(rgb.get<0>(), rgb.get<1>(), rgb.get<2>());
+    return ColorFactory::create(rgba.get<0>(), rgba.get<1>(), rgba.get<2>(), rgba.get<3>());
   }
 };
 
@@ -211,7 +211,7 @@ namespace detail
         if (!color_keywords::initialized_)
         {
           color_keywords::symbols_.add
-#define SVGPP_ON(name, r, g, b) (#name, rgb_t(r, g, b))
+#define SVGPP_ON(name, r, g, b, a) (#name, rgba_t(r, g, b, a))
 #include <svgpp/detail/dict/enumerate_colors.inc>
 #undef SVGPP_ON
             ;
